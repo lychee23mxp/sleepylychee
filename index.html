@@ -947,6 +947,52 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft')   { cur = (cur - 1 + imgs.length) % imgs.length; showLb(); }
   if (e.key === 'ArrowRight')  { cur = (cur + 1) % imgs.length; showLb(); }
 });
+
+/* ── COUNT UP (spring physics, triggers on scroll into view) ─────────────── */
+function springCountUp(el, from, to, suffix, duration) {
+  const stiffness = 100 * (1 / duration);
+  const damping   = 20  + 40 * (1 / duration);
+  let pos  = from;
+  let vel  = 0;
+  let last = performance.now();
+
+  el.textContent = from + suffix;
+
+  (function tick(now) {
+    const dt  = Math.min((now - last) / 1000, 0.064);
+    last = now;
+    const acc = stiffness * (to - pos) - damping * vel;
+    vel += acc * dt;
+    pos += vel * dt;
+
+    if (Math.abs(to - pos) < 0.3 && Math.abs(vel) < 0.3) {
+      el.textContent = to + suffix;
+      return;
+    }
+    el.textContent = Math.round(pos) + suffix;
+    requestAnimationFrame(tick);
+  })(last);
+}
+
+const statObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    statObs.unobserve(e.target);
+    const el   = e.target;
+    const raw  = el.textContent.trim();            // e.g. "100+" "2M+" "15+" "2019"
+
+    if (raw.includes('M')) {
+      springCountUp(el, 0, 2, 'M+', 2);
+    } else {
+      const num    = parseInt(raw.replace(/\D/g, ''));
+      const suffix = raw.replace(/[\d]/g, '');     // keep "+", "" etc.
+      const fromN  = raw === '2019' ? 2015 : 0;
+      springCountUp(el, fromN, num, suffix, raw === '2019' ? 1.2 : 2);
+    }
+  });
+}, { threshold: 0.4 });
+
+document.querySelectorAll('.stat-num').forEach(el => statObs.observe(el));
 </script>
 
 <script type="module">
