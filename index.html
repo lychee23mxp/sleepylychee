@@ -211,22 +211,17 @@ section { margin-top: 5.5rem; scroll-margin-top: 2rem; }
 /* ── PHOTOS ─────────────────────────────────────────────────────────────── */
 .photos {
   display: flex;
-  gap: .5rem;
+  gap: .4rem;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,252,244,.12) transparent;
-  padding-bottom: .9rem;
-  /* full-bleed beyond the 720px wrap */
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding-left: max(2rem, calc(50vw - var(--max-w) / 2));
-  padding-right: max(2rem, calc(50vw - var(--max-w) / 2));
-  /* fade edges for "more to scroll" hint */
-  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  padding-bottom: .8rem;
+  /* fade right edge to hint more to scroll */
+  mask-image: linear-gradient(to right, #000 0, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 92%, transparent 100%);
 }
 .photos::-webkit-scrollbar { height: 3px; }
 .photos::-webkit-scrollbar-track { background: transparent; }
@@ -238,8 +233,8 @@ section { margin-top: 5.5rem; scroll-margin-top: 2rem; }
 
 .photos figure {
   flex: 0 0 auto;
-  width: 230px;
-  height: 230px;
+  width: 160px;
+  height: 160px;
   position: relative;
   cursor: pointer;
   overflow: hidden;
@@ -456,7 +451,7 @@ footer a:hover { color: var(--text-em); }
   section { margin-top: 4rem; }
   .shows li { grid-template-columns: 56px 1fr; gap: .8rem; font-size: 14.5px; }
   .shows .city { display: none; }
-  .photos figure { width: 180px; height: 180px; }
+  .photos figure { width: 140px; height: 140px; }
   .press-list a { grid-template-columns: 1fr; gap: .35rem; padding: 1rem 0; }
   footer { flex-direction: column; gap: .8rem; align-items: flex-start; }
 }
