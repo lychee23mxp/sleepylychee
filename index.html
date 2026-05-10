@@ -4,993 +4,640 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SLEEPYLYCHEE</title>
+<meta name="description" content="SLEEPYLYCHEE — DJ and producer. Deep, driving techno from New York, Los Angeles, and across Asia.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,900&family=Barlow:wght@300;400&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ── TOKENS ────────────────────────────────────────────────────────────────── */
 :root {
-  --bg:    #080808;
-  --fg:    #e8e8e2;
-  --w:     #ffffff;
-  --muted: #252525;
-  --dim:   #101010;
-  --line:  rgba(255,255,255,.09);
-  --sub:   rgba(232,232,226,.36);
-  --mono:  'IBM Plex Mono', monospace;
-  --cond:  'Barlow Condensed', sans-serif;
-  --sans:  'Barlow', sans-serif;
+  --bg:        #0c0b0a;
+  --text:      rgba(255, 252, 244, 0.18);
+  --text-mid:  rgba(255, 252, 244, 0.42);
+  --text-em:   #fffaf0;
+  --pill-bg:   rgba(255, 252, 244, 0.04);
+  --pill-bd:   rgba(255, 252, 244, 0.13);
+  --pill-bd-h: rgba(255, 252, 244, 0.30);
+  --line:      rgba(255, 252, 244, 0.06);
+  --font:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --max-w:     720px;
 }
 
-/* ── RESET ─────────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
-  color: var(--fg);
-  font-family: var(--sans);
-  overflow-x: hidden;
-  opacity: 0;
-  animation: pageLoad .5s .05s forwards ease-out;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'ss01', 'cv11';
+  letter-spacing: -0.005em;
+  padding: 2.4rem 2rem 4rem;
 }
 img { display: block; max-width: 100%; }
 a { color: inherit; }
 
-/* ── GRAIN ──────────────────────────────────────────────────────────────────── */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 9000;
-  opacity: .04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-}
+.wrap { max-width: var(--max-w); margin: 0 auto; }
 
-/* ── NAV ────────────────────────────────────────────────────────────────────── */
+/* ── NAV ────────────────────────────────────────────────────────────────── */
 nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 800;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1.3rem 3rem;
-  transition: background .35s, border-color .35s;
-  border-bottom: 1px solid transparent;
-}
-nav.scrolled {
-  background: rgba(8,8,8,.96);
-  border-bottom-color: var(--line);
-  backdrop-filter: blur(8px);
-}
-.nav-logo {
-  font-family: var(--cond); font-weight: 900;
-  font-size: .95rem; letter-spacing: .2em;
-  color: var(--w); text-decoration: none; text-transform: uppercase;
-}
-.nav-links { display: flex; gap: 2.2rem; list-style: none; }
-.nav-links a {
-  text-decoration: none; font-size: .58rem; letter-spacing: .25em;
-  text-transform: uppercase; font-family: var(--mono);
-  color: var(--sub); transition: color .2s;
-  position: relative; padding-bottom: 2px;
-}
-.nav-links a::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 1px; background: var(--w);
-  transform: scaleX(0); transition: transform .25s;
-}
-.nav-links a:hover, .nav-links a.active { color: var(--w); }
-.nav-links a.active::after { transform: scaleX(1); }
-
-/* hamburger */
-.nav-ham {
-  display: none; flex-direction: column; gap: 5px;
-  background: none; border: none; cursor: pointer; padding: 4px; z-index: 900;
-}
-.nav-ham span {
-  display: block; width: 20px; height: 1px; background: var(--fg);
-  transition: transform .3s, opacity .3s;
-  transform-origin: center;
-}
-.nav-ham.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.nav-ham.open span:nth-child(2) { opacity: 0; }
-.nav-ham.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
-/* mobile overlay */
-.mob-overlay {
-  display: none; position: fixed; inset: 0; z-index: 850;
-  background: rgba(8,8,8,.97); flex-direction: column;
-  justify-content: center; align-items: center; gap: 2rem;
-  opacity: 0; pointer-events: none; transition: opacity .3s;
-}
-.mob-overlay.open { opacity: 1; pointer-events: all; }
-.mob-overlay a {
-  font-family: var(--cond); font-weight: 900;
-  font-size: clamp(3rem, 12vw, 5.5rem);
-  text-transform: uppercase; text-decoration: none;
-  color: rgba(232,232,226,.4); letter-spacing: .05em;
-  transition: color .2s;
-}
-.mob-overlay a:hover { color: var(--w); }
-
-/* ── TICKER ─────────────────────────────────────────────────────────────────── */
-.ticker-wrap {
-  position: relative; z-index: 700;
-  margin-top: 60px;               /* nav height */
-  border-bottom: 1px solid var(--line);
-  background: var(--dim);
-  overflow: hidden;
-  height: 36px;
-}
-.ticker-track {
-  display: flex; width: max-content; height: 100%; align-items: center;
-  animation: ticker 28s linear infinite;
-}
-.ticker-track:hover { animation-play-state: paused; }
-.ticker-item {
-  display: flex; align-items: center; gap: 1.8rem;
-  padding: 0 1.8rem;
-  font-size: .54rem; letter-spacing: .28em;
-  text-transform: uppercase; font-family: var(--mono);
-  color: var(--sub); white-space: nowrap;
-}
-.ticker-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,.25); flex-shrink: 0; }
-
-/* ── HERO ───────────────────────────────────────────────────────────────────── */
-.hero {
-  min-height: calc(100vh - 96px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  position: relative; overflow: hidden;
+  margin-bottom: 5.5rem;
+  font-size: 13.5px;
+  letter-spacing: -0.005em;
+}
+.nav-links {
+  display: flex;
+  gap: 1.4rem;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color .18s ease;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text-em); }
+
+.version {
+  display: inline-flex; align-items: center; gap: .5rem;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+.version::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #ff3b30;
+  box-shadow: 0 0 10px rgba(255,59,48,.55);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* ── PROSE ──────────────────────────────────────────────────────────────── */
+.prose {
+  font-size: 23px;
+  line-height: 1.5;
+  letter-spacing: -0.013em;
+  color: var(--text);
+  font-weight: 400;
+}
+.prose + .prose { margin-top: 1.4rem; }
+.em {
+  color: var(--text-em);
+  font-weight: 500;
 }
 
-/* big ghost text */
-.hero-ghost {
-  position: absolute; bottom: -4%; left: -2%;
-  font-family: var(--cond); font-weight: 900; font-style: italic;
-  font-size: clamp(6rem, 18vw, 17rem);
-  text-transform: uppercase; letter-spacing: -.03em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,.06);
-  line-height: .85; pointer-events: none; user-select: none; z-index: 0;
+/* ── PILL ───────────────────────────────────────────────────────────────── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .35em;
+  padding: .04em .55em .1em;
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-bd);
+  border-radius: 999px;
+  color: var(--text-em);
+  font-weight: 500;
+  font-size: 0.92em;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: baseline;
+  line-height: 1.25;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
 }
+.pill::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+  opacity: .7;
+}
+a.pill:hover {
+  background: rgba(255,252,244,0.08);
+  border-color: var(--pill-bd-h);
+  transform: translateY(-1px);
+}
+.pill.no-dot::before { display: none; }
 
-/* left col */
-.hero-left {
-  padding: 5rem 3rem 5rem 3.5rem;
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column; gap: 2.2rem;
-}
-.hero-tag {
-  font-size: .54rem; letter-spacing: .38em; text-transform: uppercase;
-  color: var(--sub); font-family: var(--mono);
-  animation: fadeUp .8s .2s both;
-}
-.hero-logo-wrap { animation: fadeUp .8s .35s both; }
-.hero-logo { width: clamp(220px, 38vw, 460px); }
-.hero-desc {
-  font-size: .78rem; line-height: 1.85;
-  color: rgba(232,232,226,.42); font-family: var(--mono);
-  max-width: 380px;
-  animation: fadeUp .8s .5s both;
-}
-.hero-btns {
-  display: flex; gap: .7rem; flex-wrap: wrap;
-  animation: fadeUp .8s .65s both;
-}
-.hero-btn {
-  text-decoration: none; font-size: .56rem; letter-spacing: .2em;
-  text-transform: uppercase; font-family: var(--mono);
-  padding: .55rem 1.1rem;
-  border: 1px solid rgba(255,255,255,.2);
-  color: rgba(232,232,226,.6);
-  transition: border-color .2s, color .2s, background .2s;
-  cursor: pointer; display: inline-block;
-}
-.hero-btn:hover {
-  border-color: var(--w); color: var(--w);
-  background: rgba(255,255,255,.04);
-}
-.hero-btn.primary {
-  background: var(--w); color: var(--bg);
-  border-color: var(--w);
-}
-.hero-btn.primary:hover {
-  background: rgba(255,255,255,.88); color: var(--bg);
-}
-
-/* right col */
-.hero-right {
-  position: relative; z-index: 1;
-  height: calc(100vh - 96px); min-height: 500px;
-  overflow: hidden;
-}
-.hero-right img {
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: 70% 10%;
-  filter: grayscale(20%) contrast(1.08);
-  opacity: .55;
-}
-.hero-right::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(to right, var(--bg) 0%, transparent 35%),
-              linear-gradient(to top, var(--bg) 0%, transparent 30%);
-}
-
-/* ── STATS BAR ──────────────────────────────────────────────────────────────── */
-.stats-bar {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--dim);
-}
-.stat {
-  padding: 2rem 2.5rem;
-  border-right: 1px solid var(--line);
-  display: flex; flex-direction: column; gap: .4rem;
-}
-.stat:last-child { border-right: none; }
-.stat-num {
-  font-family: var(--cond); font-weight: 900;
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  line-height: 1; color: var(--w);
-}
-.stat-label {
-  font-size: .54rem; letter-spacing: .3em; text-transform: uppercase;
-  font-family: var(--mono); color: var(--sub);
-}
-
-/* ── SHARED ─────────────────────────────────────────────────────────────────── */
-section { padding: 7rem 3.5rem; }
+/* ── SECTIONS ───────────────────────────────────────────────────────────── */
+section { margin-top: 5.5rem; scroll-margin-top: 2rem; }
 
 .eyebrow {
-  font-size: .52rem; letter-spacing: .45em; text-transform: uppercase;
-  color: var(--sub); margin-bottom: 2.5rem;
-  font-family: var(--mono);
-  display: flex; align-items: center; gap: 1rem;
+  display: flex; align-items: center; gap: .55rem;
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 1.6rem;
+  letter-spacing: 0.01em;
 }
-.eyebrow::before { content: ''; width: 24px; height: 1px; background: rgba(255,255,255,.2); }
-
-/* scroll reveal */
-.reveal {
-  opacity: 0; transform: translateY(28px);
-  transition: opacity .7s ease, transform .7s ease;
-}
-.reveal.visible { opacity: 1; transform: none; }
-.d1 { transition-delay: .1s; }
-.d2 { transition-delay: .2s; }
-.d3 { transition-delay: .32s; }
-.d4 { transition-delay: .45s; }
-
-/* ── BIO ────────────────────────────────────────────────────────────────────── */
-#bio { background: var(--bg); }
-.bio-layout {
-  display: grid; grid-template-columns: 5fr 4fr;
-  gap: 5rem; align-items: start;
-}
-.bio-left {}
-.bio-pull {
-  font-family: var(--cond); font-weight: 900;
-  font-size: clamp(1.9rem, 3.8vw, 4rem);
-  line-height: 1.0; text-transform: uppercase;
-  margin-bottom: 2.5rem; color: var(--w);
-}
-.bio-body {
-  font-size: .82rem; line-height: 2; color: var(--sub); font-weight: 300;
-}
-.bio-body + .bio-body { margin-top: 1.2rem; }
-
-.bio-right { position: relative; }
-.bio-img-frame {
-  position: relative; display: inline-block;
-}
-.bio-img-frame img {
-  width: 100%; max-width: 360px;
-  filter: grayscale(10%) contrast(1.1);
-  transition: filter .5s;
-}
-.bio-img-frame img:hover { filter: grayscale(0%) contrast(1.05); }
-.bio-img-frame::before {
-  content: ''; position: absolute;
-  top: 1.2rem; left: 1.2rem; right: -1.2rem; bottom: -1.2rem;
-  border: 1px solid rgba(255,255,255,.12);
-  pointer-events: none; z-index: -1;
+.eyebrow::before {
+  content: '';
+  width: 14px; height: 1px;
+  background: currentColor;
+  opacity: .55;
 }
 
-/* ── MIX STRIP ──────────────────────────────────────────────────────────────── */
-.mix-strip {
-  padding: 5rem 3.5rem;
-  background: var(--dim);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+/* ── SHOWS ──────────────────────────────────────────────────────────────── */
+.year {
+  margin-bottom: 2.5rem;
 }
-.mix-headline {
-  font-family: var(--cond); font-weight: 900;
-  font-size: clamp(3rem, 6vw, 6rem);
-  text-transform: uppercase; line-height: .92;
-  color: var(--sub);
+.year-head {
+  display: flex; align-items: baseline; gap: .8rem;
+  margin-bottom: .6rem;
 }
-.mix-headline em { color: var(--w); font-style: normal; display: block; }
-.mix-right {}
-.mix-label {
-  font-size: .52rem; letter-spacing: .35em; text-transform: uppercase;
-  font-family: var(--mono); color: var(--sub); margin-bottom: 1rem;
+.year-num {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-em);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
-.mix-title {
-  font-family: var(--cond); font-weight: 800;
-  font-size: 1.4rem; text-transform: uppercase; margin-bottom: .6rem; color: var(--fg);
+.year-count {
+  font-size: 12.5px;
+  color: var(--text);
 }
-.mix-desc {
-  font-size: .72rem; line-height: 1.75; color: var(--sub);
-  font-family: var(--mono); margin-bottom: 1.8rem; max-width: 360px;
+.shows {
+  list-style: none;
 }
-.mix-btn {
-  display: inline-flex; align-items: center; gap: .8rem;
-  background: var(--w); color: var(--bg);
-  text-decoration: none; padding: .9rem 1.8rem;
-  font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
-  font-family: var(--mono); font-weight: 700;
-  transition: transform .2s, box-shadow .2s;
-}
-.mix-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,255,255,.12); }
-.mix-btn::after { content: '↗'; }
-
-/* ── TIMELINE ───────────────────────────────────────────────────────────────── */
-#journey { background: var(--bg); }
-.journey-header {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 3rem; align-items: end; margin-bottom: 5rem;
-}
-.journey-title {
-  font-family: var(--cond); font-weight: 900;
-  font-size: clamp(3rem, 6vw, 6rem);
-  text-transform: uppercase; line-height: .92; color: var(--w);
-}
-.journey-sub {
-  font-size: .72rem; line-height: 1.9; color: var(--sub);
-  font-family: var(--mono); align-self: end;
-}
-
-.timeline { position: relative; padding-left: 2.5rem; }
-.timeline::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px;
-  background: linear-gradient(to bottom, var(--w) 0%, rgba(255,255,255,.1) 40%);
-}
-
-.tl-group { margin-bottom: 0; }
-.tl-btn {
-  display: flex; align-items: center; gap: 1.5rem;
-  cursor: pointer; padding: 1.2rem 0;
-  border: none; background: none; color: inherit;
-  width: 100%; text-align: left; position: relative;
-}
-.tl-btn::before {
-  content: ''; position: absolute; left: -2.5rem;
-  width: 9px; height: 9px; border-radius: 50%;
-  background: var(--bg); border: 1.5px solid rgba(255,255,255,.25);
-  transform: translateX(-4px); transition: all .3s;
-}
-.tl-btn.open::before {
-  background: var(--w); border-color: var(--w);
-  box-shadow: 0 0 0 5px rgba(255,255,255,.08);
-}
-.tl-year {
-  font-family: var(--cond); font-weight: 900;
-  font-size: 2.8rem; text-transform: uppercase;
-  color: rgba(255,255,255,.22); transition: color .3s; line-height: 1;
-}
-.tl-btn.open .tl-year { color: var(--w); }
-.tl-count {
-  font-size: .54rem; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--sub); font-family: var(--mono); transition: color .3s;
-}
-.tl-btn.open .tl-count { color: rgba(255,255,255,.5); }
-.tl-arr {
-  margin-left: auto; font-size: .55rem; color: var(--sub);
-  font-family: var(--mono); transition: transform .3s, color .3s;
-}
-.tl-btn.open .tl-arr { transform: rotate(90deg); color: var(--w); }
-
-.tl-body { overflow: hidden; max-height: 0; transition: max-height .5s cubic-bezier(.4,0,.2,1); }
-.tl-body.open { max-height: 9999px; }
-
-.tl-list { list-style: none; padding-bottom: 1.5rem; }
-.tl-item {
-  display: grid; grid-template-columns: 56px 1fr auto;
-  gap: 1.5rem; align-items: center;
-  padding: .75rem 0;
-  border-bottom: 1px solid rgba(255,255,255,.04);
-  transition: background .15s;
-}
-.tl-item:hover {
-  background: rgba(255,255,255,.02);
-  padding-left: .6rem; padding-right: .6rem; margin: 0 -.6rem;
-}
-.tl-date { font-size: .62rem; color: rgba(255,255,255,.45); font-family: var(--mono); white-space: nowrap; }
-.tl-desc { font-size: .78rem; color: rgba(232,232,226,.6); font-weight: 300; line-height: 1.4; }
-.tl-desc a { color: rgba(255,255,255,.5); text-decoration: none; }
-.tl-desc a:hover { color: var(--w); text-decoration: underline; }
-.tl-city {
-  font-size: .52rem; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(255,255,255,.2); font-family: var(--mono); white-space: nowrap;
-}
-
-/* ── GALLERY ────────────────────────────────────────────────────────────────── */
-#gallery { background: var(--dim); border-top: 1px solid var(--line); }
-.gallery-grid {
+.shows li {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 220px 220px;
-  gap: .5rem;
+  grid-template-columns: 64px 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: .45rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15.5px;
 }
-.g-item {
-  overflow: hidden; cursor: pointer; position: relative;
-  background: var(--muted);
+.shows li:last-child { border-bottom: none; }
+.shows .date {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
 }
-.g-item:nth-child(1) { grid-column: 1 / 6; grid-row: 1 / 3; }
-.g-item:nth-child(2) { grid-column: 6 / 9; grid-row: 1 / 2; }
-.g-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 2; }
-.g-item:nth-child(4) { grid-column: 6 / 13; grid-row: 2 / 3; }
+.shows .where {
+  color: var(--text);
+}
+.shows .where strong, .shows .where a {
+  color: var(--text-em);
+  font-weight: 500;
+  text-decoration: none;
+}
+.shows .where a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.shows .city {
+  font-size: 11.5px;
+  color: var(--text);
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.show-toggle {
+  display: inline-flex; align-items: center; gap: .4rem;
+  margin-top: 1rem;
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 13px;
+  color: var(--text-mid);
+  padding: 0;
+  transition: color .15s;
+}
+.show-toggle:hover { color: var(--text-em); }
+.show-toggle::after {
+  content: '↓'; font-size: 11px; transition: transform .2s;
+}
+.show-toggle.open::after { transform: rotate(180deg); }
+.year.collapsed .shows { display: none; }
 
-.g-item img {
-  width: 100%; height: 100%;
+/* ── PHOTOS ─────────────────────────────────────────────────────────────── */
+.photos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .35rem;
+}
+.photos figure {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  background: #1a1916;
+}
+.photos img {
+  width: 100%; aspect-ratio: 1;
   object-fit: cover;
-  filter: grayscale(30%) contrast(1.1);
-  transition: transform .6s cubic-bezier(.4,0,.2,1), filter .5s;
+  filter: grayscale(20%) brightness(.78) contrast(1.05);
+  transition: filter .35s ease, transform .5s ease;
 }
-.g-item:hover img {
-  transform: scale(1.06);
-  filter: grayscale(0%) contrast(1.05);
+.photos figure:hover img {
+  filter: grayscale(0%) brightness(1) contrast(1);
+  transform: scale(1.04);
 }
-.g-item::after {
-  content: attr(data-caption);
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 1.2rem 1rem .8rem;
-  background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 100%);
-  font-size: .54rem; letter-spacing: .2em; text-transform: uppercase;
-  font-family: var(--mono); color: rgba(255,255,255,.6);
-  transform: translateY(4px); opacity: 0;
-  transition: opacity .3s, transform .3s;
-}
-.g-item:hover::after { opacity: 1; transform: none; }
 
-/* ── LIGHTBOX ───────────────────────────────────────────────────────────────── */
+/* ── LINKS ROW ──────────────────────────────────────────────────────────── */
+.pill-row {
+  display: flex; flex-wrap: wrap; gap: .4rem;
+  margin-top: 1rem;
+}
+
+.contact {
+  margin-top: 2rem;
+  font-size: 16px;
+  color: var(--text);
+}
+.contact a {
+  color: var(--text-em);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: border-color .15s;
+}
+.contact a:hover { border-bottom-color: var(--text-em); }
+
+/* ── FOOTER ─────────────────────────────────────────────────────────────── */
+footer {
+  margin-top: 6rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12.5px;
+  color: var(--text);
+}
+footer a { color: var(--text); text-decoration: none; transition: color .15s; }
+footer a:hover { color: var(--text-em); }
+
+/* ── LIGHTBOX ───────────────────────────────────────────────────────────── */
 .lb {
-  position: fixed; inset: 0; z-index: 9500;
-  background: rgba(4,4,4,.95);
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(8,7,6,.96);
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity .3s;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
 }
 .lb.open { opacity: 1; pointer-events: all; }
 .lb img {
   max-width: 88vw; max-height: 86vh; object-fit: contain;
-  transform: scale(.95); transition: transform .35s cubic-bezier(.4,0,.2,1);
-  filter: grayscale(5%) contrast(1.05);
+  transform: scale(.97); transition: transform .3s ease;
 }
 .lb.open img { transform: scale(1); }
-.lb-x {
-  position: absolute; top: 1.5rem; right: 2rem;
-  background: none; border: none; color: var(--fg);
-  font-size: 1.6rem; cursor: pointer; opacity: .4;
-  transition: opacity .2s; font-family: var(--mono); line-height: 1;
+.lb-x, .lb-nav {
+  position: absolute; background: none; border: none;
+  color: var(--text-em); cursor: pointer;
+  font-family: inherit; font-size: 16px;
+  opacity: .55; transition: opacity .15s;
 }
-.lb-x:hover { opacity: 1; }
+.lb-x:hover, .lb-nav:hover { opacity: 1; }
+.lb-x { top: 1.5rem; right: 1.8rem; font-size: 22px; }
 .lb-nav {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  background: none; border: 1px solid rgba(255,255,255,.15);
-  color: var(--fg); width: 42px; height: 42px;
+  top: 50%; transform: translateY(-50%);
+  width: 38px; height: 38px;
+  border: 1px solid var(--pill-bd);
+  border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 1.2rem; opacity: .35;
-  transition: opacity .2s, border-color .2s;
 }
-.lb-nav:hover { opacity: 1; border-color: var(--w); }
 .lb-p { left: 1.5rem; }
 .lb-n { right: 1.5rem; }
 .lb-info {
   position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-  font-size: .52rem; letter-spacing: .28em; text-transform: uppercase;
-  font-family: var(--mono); color: rgba(255,255,255,.28);
+  font-size: 12px; color: var(--text-mid); letter-spacing: .15em;
 }
 
-/* ── LINKS ──────────────────────────────────────────────────────────────────── */
-#links {
-  background: var(--bg);
-  border-top: 1px solid var(--line);
+/* ── REVEAL ─────────────────────────────────────────────────────────────── */
+.rev { opacity: 0; transform: translateY(8px); transition: opacity .6s ease, transform .6s ease; }
+.rev.in { opacity: 1; transform: none; }
+
+/* ── INTRO HERO ─────────────────────────────────────────────────────────── */
+.hero {
+  min-height: calc(100vh - 9rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.links-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-.links-headline {
-  font-family: var(--cond); font-weight: 900;
-  font-size: clamp(3rem, 6.5vw, 6.5rem); line-height: .88;
-  text-transform: uppercase; color: rgba(255,255,255,.15);
+.hero .prose {
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.45;
+  letter-spacing: -0.018em;
 }
-.links-headline strong { color: var(--w); font-weight: 900; display: block; }
-.links-email {
-  margin-top: 2rem; font-size: .68rem;
-  font-family: var(--mono); color: var(--sub);
+
+/* ── HAZE: cursor-spotlight reveal — only inside .spotlight parent ─────── */
+.haze {
+  color: rgba(255, 252, 244, 0.78);  /* fully readable by default */
 }
-.links-email a { color: var(--fg); text-decoration: none; transition: color .2s; }
-.links-email a:hover { color: var(--w); }
-
-.link-list { list-style: none; margin-top: 2rem; }
-.link-list li { margin-bottom: .5rem; }
-.link-list a {
-  display: flex; align-items: center; justify-content: space-between;
-  text-decoration: none; font-size: .6rem; letter-spacing: .22em;
-  text-transform: uppercase; padding: 1rem 1.2rem;
-  border: 1px solid var(--line);
-  font-family: var(--mono); color: var(--sub);
-  transition: border-color .2s, color .2s, background .2s;
+.spotlight .haze {
+  color: rgba(255, 252, 244, 0.06);  /* hidden until cursor reveals */
+  transition: color .3s ease;
+  cursor: default;
 }
-.link-list a:hover { border-color: var(--w); color: var(--w); background: rgba(255,255,255,.02); }
-.link-list a span { font-size: .7rem; opacity: .4; }
 
-/* ── FOOTER ─────────────────────────────────────────────────────────────────── */
-footer {
-  padding: 1.5rem 3.5rem;
-  display: flex; justify-content: space-between; align-items: center;
-  border-top: 1px solid var(--line);
-  font-size: .52rem; color: rgba(255,255,255,.18);
-  letter-spacing: .2em; text-transform: uppercase;
-  font-family: var(--mono);
+/* ── MOBILE ─────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  body { padding: 1.6rem 1.2rem 3rem; font-size: 16px; }
+  .prose { font-size: 19px; }
+  nav { margin-bottom: 3.5rem; font-size: 12.5px; }
+  .nav-links { gap: 1rem; flex-wrap: wrap; }
+  section { margin-top: 4rem; }
+  .shows li { grid-template-columns: 56px 1fr; gap: .8rem; font-size: 14.5px; }
+  .shows .city { display: none; }
+  .photos { grid-template-columns: repeat(2, 1fr); }
+  footer { flex-direction: column; gap: .8rem; align-items: flex-start; }
 }
-footer a { color: rgba(255,255,255,.18); text-decoration: none; transition: color .2s; }
-footer a:hover { color: var(--w); }
 
-/* ── ANIMATIONS ─────────────────────────────────────────────────────────────── */
-@keyframes pageLoad { to { opacity: 1; } }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-/* ── MOBILE ─────────────────────────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  nav { padding: 1rem 1.5rem; }
-  .nav-links { display: none; }
-  .nav-ham { display: flex; }
-  .mob-overlay { display: flex; }
-
-  section { padding: 4.5rem 1.5rem; }
-  .hero { grid-template-columns: 1fr; min-height: 100svh; }
-  .hero-right { display: none; }
-  .hero-left { padding: 5rem 1.5rem 3rem; }
-
-  .stats-bar { grid-template-columns: repeat(2, 1fr); }
-  .stat:nth-child(2) { border-right: none; }
-
-  .mix-strip { grid-template-columns: 1fr; gap: 2rem; padding: 3.5rem 1.5rem; }
-  .bio-layout { grid-template-columns: 1fr; gap: 3rem; }
-  .bio-right { display: none; }
-
-  .gallery-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(3, 200px);
-  }
-  .g-item:nth-child(1) { grid-column: 1 / 2; grid-row: 1 / 3; }
-  .g-item:nth-child(2) { grid-column: 2 / 3; grid-row: 1 / 2; }
-  .g-item:nth-child(3) { grid-column: 2 / 3; grid-row: 2 / 3; }
-  .g-item:nth-child(4) { grid-column: 1 / 3; grid-row: 3 / 4; }
-
-  .links-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-  .journey-header { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 3rem; }
-  .tl-item { grid-template-columns: 50px 1fr; }
-  .tl-city { display: none; }
-  footer { padding: 1.2rem 1.5rem; }
+@media (prefers-reduced-motion: reduce) {
+  .version::before { animation: none; }
+  .rev { opacity: 1; transform: none; transition: none; }
 }
 </style>
 </head>
 <body>
 
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#bio"    data-s="bio">Bio</a></li>
+      <li><a href="#shows"  data-s="shows">Shows</a></li>
+      <li><a href="#photos" data-s="photos">Photos</a></li>
+      <li><a href="#links"  data-s="links">Links</a></li>
+    </ul>
+    <span class="version">R/138 · ON AIR</span>
+  </nav>
+
+  <!-- INTRO -->
+  <header class="hero">
+    <p class="prose spotlight">
+      <span class="haze">Hi, I'm</span> <span class="em">SLEEPYLYCHEE</span><span class="haze">. I'm a</span>
+      <a class="pill" href="#bio">DJ</a> <span class="haze">and</span>
+      <a class="pill" href="#bio">PRODUCER</a>
+      <span class="haze">bouncing between</span>
+      <a class="pill" href="#shows">NEW YORK</a><span class="haze">,</span>
+      <a class="pill" href="#shows">LOS ANGELES</a><span class="haze">, and</span>
+      <a class="pill" href="#shows">ASIA</a>
+      <span class="haze">— where I play deep, driving</span>
+      <span class="pill no-dot">TECHNO</span>
+      <span class="haze">with heavy bass, tribal rhythms, and industrial textures. Since</span>
+      <span class="em">2019</span>
+      <span class="haze">I've played</span>
+      <span class="em">100+ shows</span>
+      <span class="haze">across</span>
+      <span class="em">15+ cities</span><span class="haze">. You can find me on</span>
+      <a class="pill" href="https://ra.co/dj/sleepylychee" target="_blank" rel="noopener">RA</a><span class="haze">,</span>
+      <a class="pill" href="https://soundcloud.com/sleepylychee01" target="_blank" rel="noopener">SOUNDCLOUD</a><span class="haze">, and</span>
+      <a class="pill" href="https://www.instagram.com/sleepylychee01/" target="_blank" rel="noopener">INSTAGRAM</a>
+      <span class="haze">— or scroll for the long story.</span>
+    </p>
+  </header>
+
+  <!-- BIO -->
+  <section id="bio">
+    <span class="eyebrow">bio</span>
+    <p class="prose rev">
+      <span class="em">SLEEPYLYCHEE</span> <span class="haze">is a DJ and producer active in the underground electronic scenes of</span>
+      <span class="em">New York</span><span class="haze">,</span> <span class="em">Los Angeles</span><span class="haze">, and across</span>
+      <span class="em">Asia</span><span class="haze">. She has played at some of the most forward-thinking venues and collaborated with artists pushing the boundaries of sound.</span>
+    </p>
+    <p class="prose rev">
+      <span class="haze">Her sets blend deep, driving</span> <span class="em">techno</span> <span class="haze">with heavy bass and tribal rhythmic elements, layered with industrial textures and atmospheric soundscapes — pulsating low-end, polyrhythmic percussion, and evolving synth patterns that build tension and release.</span>
+    </p>
+    <p class="prose rev">
+      <span class="haze">In her musical world, she leads the audience into a space filled with tension and rhythm, breaking traditional boundaries and ushering them into unknown territories. A recent guest mix is up with</span>
+      <a class="pill" href="https://soundcloud.com/6amgroup/guest-mix-sleepylychee?si=b3e4e28ca30847d7a43f485df223a537" target="_blank" rel="noopener">6AM GROUP</a><span class="haze">.</span>
+    </p>
+  </section>
+
+  <!-- SHOWS -->
+  <section id="shows">
+    <span class="eyebrow">shows</span>
+
+    <div class="year">
+      <div class="year-head">
+        <span class="year-num">2026</span>
+        <span class="year-count">8 dates</span>
+      </div>
+      <ul class="shows">
+        <li><span class="date">May 20</span><span class="where">@<strong>moodringnyc</strong></span><span class="city">New York</span></li>
+        <li><span class="date">May 01</span><span class="where">@<strong>jupiterdisco</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Apr 18</span><span class="where">@<strong>highsocietyfestival</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Apr 17</span><span class="where">@<strong>markethotel</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Apr 11</span><span class="where">@<strong>nightclub101</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Feb 20</span><span class="where">@<strong>moodringnyc</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Feb 15</span><span class="where"><a href="https://www.instagram.com/notyetdesign_/" target="_blank" rel="noopener">@notyetdesign_</a> &amp; <a href="https://www.instagram.com/common.wavs/" target="_blank" rel="noopener">@common.wavs</a></span><span class="city">New York</span></li>
+        <li><span class="date">Jan 30</span><span class="where">@<strong>theslipperclutch</strong></span><span class="city">Los Angeles</span></li>
+      </ul>
+    </div>
+
+    <div class="year collapsed">
+      <div class="year-head">
+        <span class="year-num">2025</span>
+        <span class="year-count">6 dates</span>
+        <button class="show-toggle" type="button" onclick="toggleYear(this)">expand</button>
+      </div>
+      <ul class="shows">
+        <li><span class="date">Jul 12</span><span class="where">@<strong>Technosnobs</strong></span><span class="city">Tampa</span></li>
+        <li><span class="date">May 10</span><span class="where">@<strong>H0l0</strong> with @agape_music</span><span class="city">New York</span></li>
+        <li><span class="date">Apr 06</span><span class="where">@<strong>Manray</strong> with @adapt</span><span class="city">Boston</span></li>
+        <li><span class="date">Jan 29</span><span class="where">@<strong>happyfunhideaway</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Jan 25</span><span class="where">@<strong>elsewhere</strong> with @bias.nyc</span><span class="city">New York</span></li>
+        <li><span class="date">Jan 11</span><span class="where">@<strong>fuzhousisters</strong></span><span class="city">New York</span></li>
+      </ul>
+    </div>
+
+    <div class="year collapsed">
+      <div class="year-head">
+        <span class="year-num">2024</span>
+        <span class="year-count">31 dates</span>
+        <button class="show-toggle" type="button" onclick="toggleYear(this)">expand</button>
+      </div>
+      <ul class="shows">
+        <li><span class="date">Dec 09</span><span class="where">@<strong>markethotel</strong> with @WATF!</span><span class="city">New York</span></li>
+        <li><span class="date">Nov 09</span><span class="where">@<strong>Standard Nerds Club</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Oct 04</span><span class="where">@<strong>rash_nyc</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Sep 11</span><span class="where">@<strong>BYEBYETECHNO</strong> with Parsons School of Design</span><span class="city">New York</span></li>
+        <li><span class="date">Jul 26</span><span class="where">@<strong>hypebeast</strong> with @antigeneral</span><span class="city">Shenzhen</span></li>
+        <li><span class="date">Jul 21</span><span class="where">@<strong>oilclub</strong> with @dawless_teahouse</span><span class="city">Shenzhen</span></li>
+        <li><span class="date">Jul 20</span><span class="where">@<strong>Animatoaudio</strong> with @dawless_teahouse</span><span class="city">Hong Kong</span></li>
+        <li><span class="date">Jul 14</span><span class="where">@<strong>byybradio</strong></span><span class="city">Shanghai</span></li>
+        <li><span class="date">Jul 13</span><span class="where">@<strong>SofuArea</strong></span><span class="city">Shanghai</span></li>
+        <li><span class="date">Jun 29</span><span class="where">@<strong>whyclub</strong> with @durante_max</span><span class="city">Shenzhen</span></li>
+        <li><span class="date">Jun 28</span><span class="where">@<strong>mininini</strong> with @durante_max</span><span class="city">Wuhan</span></li>
+        <li><span class="date">Jun 26</span><span class="where">@<strong>all_club_</strong></span><span class="city">Shanghai</span></li>
+        <li><span class="date">Jun 22</span><span class="where">with @<strong>whitesabbathh</strong></span><span class="city">Shanghai</span></li>
+        <li><span class="date">Jun 21</span><span class="where">@<strong>cedarshanghai</strong> with @chromivsn + 5 VJs</span><span class="city">Shanghai</span></li>
+        <li><span class="date">Jun 19</span><span class="where">with @<strong>moodswing.exp</strong></span><span class="city">Shanghai</span></li>
+        <li><span class="date">Jun 16</span><span class="where">@<strong>dirtyhousesh</strong></span><span class="city">Shanghai</span></li>
+        <li><span class="date">Jun 01</span><span class="where">@<strong>cedarshanghai</strong> with @liu3hhh</span><span class="city">Shanghai</span></li>
+        <li><span class="date">May 03</span><span class="where">@<strong>purgtory.bk</strong> with <a href="https://www.instagram.com/connexions.nyc/" target="_blank" rel="noopener">@connexions.nyc</a></span><span class="city">New York</span></li>
+        <li><span class="date">Apr 25</span><span class="where">@<strong>bosanovacivicclub</strong></span><span class="city">New York</span></li>
+        <li><span class="date">Apr 20</span><span class="where">@<strong>Afoxcollective</strong> with @Girl_irl, @whitesabbath</span><span class="city">New York</span></li>
+        <li><span class="date">Apr 11</span><span class="where">@<strong>iidrr</strong> distortion party</span><span class="city">New York</span></li>
+        <li><span class="date">Mar 27</span><span class="where">@<strong>xpizza</strong> closing program with <a href="https://www.instagram.com/senaidaxoxo/" target="_blank" rel="noopener">@senaidaxoxo</a></span><span class="city">New York</span></li>
+        <li><span class="date">Mar 13</span><span class="where">@<strong>moodringnyc</strong> with @dugout.radio</span><span class="city">New York</span></li>
+        <li><span class="date">Mar 09</span><span class="where">@<strong>sojourner_gallery</strong> with @byebyetechno</span><span class="city">New York</span></li>
+        <li><span class="date">Feb 29</span><span class="where">@<strong>bar.jade.bk</strong> with @tysmrecords</span><span class="city">New York</span></li>
+        <li><span class="date">Feb 23</span><span class="where">@<strong>byebyetechno</strong> launch party</span><span class="city">New York</span></li>
+        <li><span class="date">Feb 15</span><span class="where">@<strong>noflex.nyc</strong> with @SUPESBASE, @SpotteToad</span><span class="city">New York</span></li>
+        <li><span class="date">Feb 10</span><span class="where">@<strong>wearethefutureparty</strong> with <a href="https://www.instagram.com/vidalibremusic/" target="_blank" rel="noopener">@vidalibremusic</a></span><span class="city">New York</span></li>
+        <li><span class="date">Feb 08</span><span class="where">@<strong>Vonbarnyc</strong> with @under_bleecker_street</span><span class="city">New York</span></li>
+        <li><span class="date">Feb 06</span><span class="where">@<strong>xpizza</strong> with @KIDC, @Waterscape</span><span class="city">New York</span></li>
+        <li><span class="date">Jan 20</span><span class="where">@<strong>cccradio</strong> with @annielee, @samisos_a</span><span class="city">New York</span></li>
+        <li><span class="date">Jan 13</span><span class="where">@<strong>BBBbar</strong> with @JacksonLee, @MA JIA</span><span class="city">Beijing</span></li>
+        <li><span class="date">Jan 12</span><span class="where">@<strong>Gasclub</strong> with @mr.d.mouse, @cisco</span><span class="city">Tianjin</span></li>
+      </ul>
+    </div>
+
+    <div class="year collapsed">
+      <div class="year-head">
+        <span class="year-num">2023</span>
+        <span class="year-count">8 dates</span>
+        <button class="show-toggle" type="button" onclick="toggleYear(this)">expand</button>
+      </div>
+      <ul class="shows">
+        <li><span class="date">Dec 31</span><span class="where">@<strong>Minininiklub</strong> with @mr.d.mouse</span><span class="city">Wuhan</span></li>
+        <li><span class="date">Nov 01</span><span class="where">@<strong>ccc.radio</strong> with @michelle_kay, <a href="https://www.instagram.com/ramsey.neville/" target="_blank" rel="noopener">@ramsey.neville</a></span><span class="city">New York</span></li>
+        <li><span class="date">Aug 13</span><span class="where">@<strong>404 club</strong> with @allenvee</span><span class="city">Wuhan</span></li>
+        <li><span class="date">Aug 05</span><span class="where">@<strong>Minininiklub</strong> with @Syndicate, @Vonatawk</span><span class="city">Wuhan</span></li>
+        <li><span class="date">Jul 22</span><span class="where">@<strong>Floso</strong> with @After_Co, @DOKEDO</span><span class="city">Beijing</span></li>
+        <li><span class="date">Jul 08</span><span class="where">@<strong>dadabarbeijing</strong> with @ANOHITO, @Yilun</span><span class="city">Beijing</span></li>
+        <li><span class="date">Jul 02</span><span class="where">@<strong>WINETAIL</strong> with @FemaleP</span><span class="city">Beijing</span></li>
+        <li><span class="date">May 13</span><span class="where">@<strong>bananaradio</strong> with @swimsoul</span><span class="city">Los Angeles</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PHOTOS -->
+  <section id="photos">
+    <span class="eyebrow">photos</span>
+    <div class="photos">
+      <figure data-i="0"><img src="https://static.wixstatic.com/media/af8f99_50c268571fc348b9a642b37bb8c55474~mv2.jpg" alt="Live set" loading="lazy"></figure>
+      <figure data-i="1"><img src="https://static.wixstatic.com/media/af8f99_ad47fefb8ed345978c055d27219f202c~mv2.jpg" alt="Event" loading="lazy"></figure>
+      <figure data-i="2"><img src="https://static.wixstatic.com/media/af8f99_c84ab3c970874865bb8c95ba618ba13a~mv2.jpg" alt="Event" loading="lazy"></figure>
+      <figure data-i="3"><img src="https://static.wixstatic.com/media/af8f99_4f81ce7f424743b99dda7c002f855d34~mv2.jpg" alt="Event" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section id="links">
+    <span class="eyebrow">links</span>
+    <p class="prose" style="font-size:18px;">Find me here.</p>
+    <div class="pill-row">
+      <a class="pill" href="https://ra.co/dj/sleepylychee" target="_blank" rel="noopener">Resident Advisor</a>
+      <a class="pill" href="https://soundcloud.com/sleepylychee01" target="_blank" rel="noopener">SoundCloud</a>
+      <a class="pill" href="https://www.instagram.com/sleepylychee01/" target="_blank" rel="noopener">Instagram</a>
+      <a class="pill" href="https://twitter.com/lil3vvvv" target="_blank" rel="noopener">Twitter / X</a>
+      <a class="pill" href="https://www.youtube.com/channel/UC1mEi11i5VSS3thMKxRLJ0A" target="_blank" rel="noopener">YouTube</a>
+    </div>
+    <p class="contact">Booking &amp; hellos → <a href="mailto:sleepylycheee@gmail.com">sleepylycheee@gmail.com</a></p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© SLEEPYLYCHEE 2026</span>
+    <span>R/138 · v.099</span>
+  </footer>
+
+</div>
+
 <!-- LIGHTBOX -->
-<div class="lb" id="lb">
-  <button class="lb-x" id="lb-x">×</button>
-  <button class="lb-nav lb-p" id="lb-p">‹</button>
-  <img id="lb-img" src="" alt="" />
-  <button class="lb-nav lb-n" id="lb-n">›</button>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="lb-x" id="lb-x" aria-label="Close">close</button>
+  <button class="lb-nav lb-p" id="lb-p" aria-label="Previous">‹</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-nav lb-n" id="lb-n" aria-label="Next">›</button>
   <div class="lb-info" id="lb-info"></div>
 </div>
 
-<!-- MOBILE OVERLAY -->
-<div class="mob-overlay" id="mob-overlay">
-  <a href="#bio">Bio</a>
-  <a href="#journey">Journey</a>
-  <a href="#gallery">Gallery</a>
-  <a href="#links">Links</a>
-</div>
-
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="nav-logo">SLEEPYLYCHEE</a>
-  <ul class="nav-links">
-    <li><a href="#bio"     data-s="bio">Bio</a></li>
-    <li><a href="#journey" data-s="journey">Journey</a></li>
-    <li><a href="#gallery" data-s="gallery">Gallery</a></li>
-    <li><a href="#links"   data-s="links">Links</a></li>
-  </ul>
-  <button class="nav-ham" id="ham" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- TICKER -->
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-track">
-    <!-- duplicated for seamless loop -->
-    <span class="ticker-item">SLEEPYLYCHEE<span class="ticker-dot"></span>DJ &amp; PRODUCER<span class="ticker-dot"></span>NEW YORK<span class="ticker-dot"></span>LOS ANGELES<span class="ticker-dot"></span>ASIA<span class="ticker-dot"></span>DEEP TECHNO<span class="ticker-dot"></span>HEAVY BASS<span class="ticker-dot"></span>TRIBAL RHYTHMS<span class="ticker-dot"></span>INDUSTRIAL TEXTURES<span class="ticker-dot"></span>RESIDENT ADVISOR<span class="ticker-dot"></span>SOUNDCLOUD<span class="ticker-dot"></span></span>
-    <span class="ticker-item">SLEEPYLYCHEE<span class="ticker-dot"></span>DJ &amp; PRODUCER<span class="ticker-dot"></span>NEW YORK<span class="ticker-dot"></span>LOS ANGELES<span class="ticker-dot"></span>ASIA<span class="ticker-dot"></span>DEEP TECHNO<span class="ticker-dot"></span>HEAVY BASS<span class="ticker-dot"></span>TRIBAL RHYTHMS<span class="ticker-dot"></span>INDUSTRIAL TEXTURES<span class="ticker-dot"></span>RESIDENT ADVISOR<span class="ticker-dot"></span>SOUNDCLOUD<span class="ticker-dot"></span></span>
-  </div>
-</div>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-ghost" aria-hidden="true">SLEEPY<br/>LYCHEE</div>
-
-  <div class="hero-left">
-    <p class="hero-tag">DJ · Producer · NYC · LA · Asia</p>
-    <div class="hero-logo-wrap">
-      <img class="hero-logo" src="SLEEPYLYCHEE_GMAIL_LOGO.gif" alt="SLEEPYLYCHEE" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <h1 style="display:none;font-family:var(--cond);font-weight:900;font-size:clamp(2.5rem,8vw,5.5rem);text-transform:uppercase;letter-spacing:.05em;color:var(--w)">SLEEPYLYCHEE</h1>
-    </div>
-    <p class="hero-desc">Deep, driving techno — heavy bass, tribal rhythms, industrial textures, and atmospheric soundscapes.</p>
-    <div class="hero-btns">
-      <a href="https://ra.co/dj/sleepylychee" target="_blank" rel="noopener" class="hero-btn primary">Resident Advisor</a>
-      <a href="https://soundcloud.com/sleepylychee01" target="_blank" rel="noopener" class="hero-btn">SoundCloud</a>
-      <a href="https://www.instagram.com/sleepylychee01/" target="_blank" rel="noopener" class="hero-btn">Instagram</a>
-      <a href="https://twitter.com/lil3vvvv" target="_blank" rel="noopener" class="hero-btn">Twitter</a>
-      <a href="https://www.youtube.com/channel/UC1mEi11i5VSS3thMKxRLJ0A" target="_blank" rel="noopener" class="hero-btn">YouTube</a>
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <img src="lessps.jpg" alt="SLEEPYLYCHEE" />
-  </div>
-</section>
-
-<!-- STATS BAR -->
-<div class="stats-bar reveal">
-  <div class="stat">
-    <span class="stat-num">100+</span>
-    <span class="stat-label">Shows Played</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num">2M+</span>
-    <span class="stat-label">Plays</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num">15+</span>
-    <span class="stat-label">Cities</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num">2019</span>
-    <span class="stat-label">Active Since</span>
-  </div>
-</div>
-
-<!-- BIO -->
-<section id="bio">
-  <div class="eyebrow reveal">About</div>
-  <div class="bio-layout">
-    <div class="bio-left">
-      <h2 class="bio-pull reveal">DEEP, DRIVING TECHNO.<br/>HEAVY BASS.<br/>UNKNOWN TERRITORIES.</h2>
-      <p class="bio-body reveal d1">SLEEPYLYCHEE is a DJ and producer active in New York, Los Angeles, and across Asia's underground electronic scenes. She has played at some of the most forward-thinking venues and collaborated with cutting-edge artists pushing the boundaries of sound.</p>
-      <p class="bio-body reveal d2">She crafts dynamic DJ sets that blend deep, driving techno with heavy bass and tribal rhythmic elements, layered with industrial textures and atmospheric soundscapes — featuring pulsating low-end, polyrhythmic percussion, and evolving synth patterns that build tension and release.</p>
-      <p class="bio-body reveal d3">In her unique musical world, she leads the audience into a space filled with tension and rhythm — breaking traditional music boundaries and ushering the audience into unknown territories. Intense electronic pulses, ever-changing sound textures, and unique soundscapes collectively construct a marvelous and profound musical experience.</p>
-    </div>
-    <div class="bio-right reveal d2">
-      <div class="bio-img-frame">
-        <img src="presshot26.jpg" alt="SLEEPYLYCHEE" />
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MIX STRIP -->
-<div class="mix-strip">
-  <div class="mix-headline reveal">SELECTIVE<em>MIX</em></div>
-  <div class="mix-right reveal d1">
-    <p class="mix-label">6AM Group Guest Mix</p>
-    <p class="mix-title">SLEEPYLYCHEE × 6AM Group</p>
-    <p class="mix-desc">Dark, hypnotic techno from the underground — heavy bass, tribal percussion, and shifting industrial atmospheres. An hour deep into SLEEPYLYCHEE's world.</p>
-    <a class="mix-btn" href="https://soundcloud.com/6amgroup/guest-mix-sleepylychee?si=b3e4e28ca30847d7a43f485df223a537&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank" rel="noopener">Listen on SoundCloud</a>
-  </div>
-</div>
-
-<!-- JOURNEY -->
-<section id="journey">
-  <div class="journey-header">
-    <h2 class="journey-title reveal">EVERY CITY,<br/>EVERY STAGE.</h2>
-    <p class="journey-sub reveal d1">From Beijing basements to New York warehouses — a growing map of nights and memories. Click a year to expand.</p>
-  </div>
-
-  <div class="timeline">
-
-    <div class="tl-group reveal">
-      <button class="tl-btn open" onclick="toggleYear(this)">
-        <span class="tl-year">2026</span>
-        
-        <span class="tl-arr">▶</span>
-      </button>
-      <div class="tl-body open">
-        <ul class="tl-list">
-          <li class="tl-item"><span class="tl-date">May 20</span><span class="tl-desc">@moodringnyc</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">May 01</span><span class="tl-desc">@jupiterdisco</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Apr 18</span><span class="tl-desc">@highsocietyfestival</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Apr 17</span><span class="tl-desc">@markethotel</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Apr 11</span><span class="tl-desc">@nightclub101</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 20</span><span class="tl-desc">@moodringnyc</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 15</span><span class="tl-desc"><a href="https://www.instagram.com/notyetdesign_/" target="_blank" rel="noopener">@notyetdesign_</a> &amp; <a href="https://www.instagram.com/common.wavs/" target="_blank" rel="noopener">@common.wavs</a></span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Jan 30</span><span class="tl-desc">@theslipperclutch</span><span class="tl-city">Los Angeles</span></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="tl-group reveal d1">
-      <button class="tl-btn" onclick="toggleYear(this)">
-        <span class="tl-year">2025</span>
-        
-        <span class="tl-arr">▶</span>
-      </button>
-      <div class="tl-body">
-        <ul class="tl-list">
-          <li class="tl-item"><span class="tl-date">Jul 12</span><span class="tl-desc">@Technosnobs</span><span class="tl-city">Tampa</span></li>
-          <li class="tl-item"><span class="tl-date">May 10</span><span class="tl-desc">@H0l0 with @agape_music</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Apr 06</span><span class="tl-desc">@Manray with @adapt</span><span class="tl-city">Boston</span></li>
-          <li class="tl-item"><span class="tl-date">Jan 29</span><span class="tl-desc">@happyfunhideaway</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Jan 25</span><span class="tl-desc">@elsewhere with @bias.nyc</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Jan 11</span><span class="tl-desc">@fuzhousisters</span><span class="tl-city">New York</span></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="tl-group reveal d2">
-      <button class="tl-btn" onclick="toggleYear(this)">
-        <span class="tl-year">2024</span>
-        
-        <span class="tl-arr">▶</span>
-      </button>
-      <div class="tl-body">
-        <ul class="tl-list">
-          <li class="tl-item"><span class="tl-date">Dec 09</span><span class="tl-desc">@markethotel with @WATF!</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Nov 09</span><span class="tl-desc">@Standard Nerds Club</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Oct 04</span><span class="tl-desc">@rash_nyc</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Sep 11</span><span class="tl-desc">@BYEBYETECHNO with @Parsons School of Design</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 26</span><span class="tl-desc">@hypebeast with @antigeneral</span><span class="tl-city">Shenzhen</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 21</span><span class="tl-desc">@oilclub with @dawless_teahouse</span><span class="tl-city">Shenzhen</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 20</span><span class="tl-desc">@Animatoaudio with @dawless_teahouse</span><span class="tl-city">Hong Kong</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 14</span><span class="tl-desc">@byybradio</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 13</span><span class="tl-desc">@SofuArea</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 29</span><span class="tl-desc">@whyclub with @durante_max</span><span class="tl-city">Shenzhen</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 28</span><span class="tl-desc">@mininini with @durante_max</span><span class="tl-city">Wuhan</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 26</span><span class="tl-desc">@all_club_</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 22</span><span class="tl-desc">with @whitesabbathh</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 21</span><span class="tl-desc">@cedarshanghai with @chromivsn + 5 VJs</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 19</span><span class="tl-desc">with @moodswing.exp</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 16</span><span class="tl-desc">@dirtyhousesh</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">Jun 01</span><span class="tl-desc">@cedarshanghai with @liu3hhh</span><span class="tl-city">Shanghai</span></li>
-          <li class="tl-item"><span class="tl-date">May 03</span><span class="tl-desc">@purgtory.bk with <a href="https://www.instagram.com/connexions.nyc/" target="_blank" rel="noopener">@connexions.nyc</a></span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Apr 25</span><span class="tl-desc">@bosanovacivicclub</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Apr 20</span><span class="tl-desc">@Afoxcollective with @Girl_irl, @whitesabbath</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Apr 11</span><span class="tl-desc">@iidrr distortion party</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Mar 27</span><span class="tl-desc">@xpizza closing program with <a href="https://www.instagram.com/senaidaxoxo/" target="_blank" rel="noopener">@senaidaxoxo</a></span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Mar 13</span><span class="tl-desc">@moodringnyc with @dugout.radio</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Mar 09</span><span class="tl-desc">@sojourner_gallery with @byebyetechno</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 29</span><span class="tl-desc">@bar.jade.bk with @tysmrecords</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 23</span><span class="tl-desc">@byebyetechno LAUNCH PARTY</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 15</span><span class="tl-desc">@noflex.nyc with @SUPESBASE, @SpotteToad</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 10</span><span class="tl-desc">@wearethefutureparty with <a href="https://www.instagram.com/vidalibremusic/" target="_blank" rel="noopener">@vidalibremusic</a></span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 08</span><span class="tl-desc">@Vonbarnyc with @under_bleecker_street</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Feb 06</span><span class="tl-desc">@xpizza with @KIDC, @Waterscape</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Jan 20</span><span class="tl-desc">@cccradio with @annielee, @samisos_a</span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Jan 13</span><span class="tl-desc">@BBBbar with @JacksonLee, @MA JIA</span><span class="tl-city">Beijing</span></li>
-          <li class="tl-item"><span class="tl-date">Jan 12</span><span class="tl-desc">@Gasclub with @mr.d.mouse, @cisco</span><span class="tl-city">Tianjin</span></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="tl-group reveal d3">
-      <button class="tl-btn" onclick="toggleYear(this)">
-        <span class="tl-year">2023</span>
-        
-        <span class="tl-arr">▶</span>
-      </button>
-      <div class="tl-body">
-        <ul class="tl-list">
-          <li class="tl-item"><span class="tl-date">Dec 31</span><span class="tl-desc">@Minininiklub with @mr.d.mouse</span><span class="tl-city">Wuhan</span></li>
-          <li class="tl-item"><span class="tl-date">Nov 01</span><span class="tl-desc">@ccc.radio with @michelle_kay, <a href="https://www.instagram.com/ramsey.neville/" target="_blank" rel="noopener">@ramsey.neville</a></span><span class="tl-city">New York</span></li>
-          <li class="tl-item"><span class="tl-date">Aug 13</span><span class="tl-desc">@404 club with @allenvee</span><span class="tl-city">Wuhan</span></li>
-          <li class="tl-item"><span class="tl-date">Aug 05</span><span class="tl-desc">@Minininiklub with @Syndicate, @Vonatawk</span><span class="tl-city">Wuhan</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 22</span><span class="tl-desc">@Floso with @After_Co, @DOKEDO</span><span class="tl-city">Beijing</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 08</span><span class="tl-desc">@dadabarbeijing with @ANOHITO, @Yilun</span><span class="tl-city">Beijing</span></li>
-          <li class="tl-item"><span class="tl-date">Jul 02</span><span class="tl-desc">@WINETAIL with @FemaleP</span><span class="tl-city">Beijing</span></li>
-          <li class="tl-item"><span class="tl-date">May 13</span><span class="tl-desc">@bananaradio with @swimsoul</span><span class="tl-city">Los Angeles</span></li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- GALLERY -->
-<section id="gallery">
-  <div class="eyebrow reveal">Past Events</div>
-  <div class="gallery-grid">
-    <div class="g-item reveal"      data-index="0" data-caption="Live at event">
-      <img src="https://static.wixstatic.com/media/af8f99_50c268571fc348b9a642b37bb8c55474~mv2.jpg" alt="Live set" loading="lazy" />
-    </div>
-    <div class="g-item reveal d1"   data-index="1" data-caption="Live at event">
-      <img src="https://static.wixstatic.com/media/af8f99_ad47fefb8ed345978c055d27219f202c~mv2.jpg" alt="Event" loading="lazy" />
-    </div>
-    <div class="g-item reveal d2"   data-index="2" data-caption="Live at event">
-      <img src="https://static.wixstatic.com/media/af8f99_c84ab3c970874865bb8c95ba618ba13a~mv2.jpg" alt="Event" loading="lazy" />
-    </div>
-    <div class="g-item reveal d3"   data-index="3" data-caption="Live at event">
-      <img src="https://static.wixstatic.com/media/af8f99_4f81ce7f424743b99dda7c002f855d34~mv2.jpg" alt="Event" loading="lazy" />
-    </div>
-  </div>
-</section>
-
-<!-- LINKS -->
-<section id="links">
-  <div class="links-layout">
-    <div class="reveal">
-      <h2 class="links-headline">FIND<br/>ME<strong>HERE</strong></h2>
-      <p class="links-email">Booking &amp; contact:<br/><a href="mailto:sleepylycheee@gmail.com">sleepylycheee@gmail.com</a></p>
-    </div>
-    <div class="reveal d1">
-      <div class="eyebrow">Links</div>
-      <ul class="link-list">
-        <li><a href="https://ra.co/dj/sleepylychee"                                            target="_blank" rel="noopener">Resident Advisor <span>↗</span></a></li>
-        <li><a href="https://soundcloud.com/sleepylychee01"                                    target="_blank" rel="noopener">SoundCloud        <span>↗</span></a></li>
-        <li><a href="https://www.instagram.com/sleepylychee01/"                                target="_blank" rel="noopener">Instagram         <span>↗</span></a></li>
-        <li><a href="https://twitter.com/lil3vvvv"                                             target="_blank" rel="noopener">Twitter / X       <span>↗</span></a></li>
-        <li><a href="https://www.youtube.com/channel/UC1mEi11i5VSS3thMKxRLJ0A"                 target="_blank" rel="noopener">YouTube           <span>↗</span></a></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <span>© SLEEPYLYCHEE 2026</span>
-  <div style="display:flex;gap:1.5rem">
-    <a href="https://www.instagram.com/sleepylychee01/" target="_blank" rel="noopener">IG</a>
-    <a href="https://soundcloud.com/sleepylychee01"     target="_blank" rel="noopener">SC</a>
-    <a href="https://ra.co/dj/sleepylychee"             target="_blank" rel="noopener">RA</a>
-  </div>
-</footer>
-
 <script>
-/* ── TIMELINE ──────────────────────────────────────────────── */
+/* ── CURSOR SPOTLIGHT (fog reveal on hazed text) ────────────────────────── */
+(function spotlight() {
+  const RADIUS  = 220;            // px — aperture size
+  const FALLOFF = 1.4;            // higher = sharper falloff
+  const MIN_OP  = 0.06;           // baseline opacity (very faint)
+  const MAX_OP  = 0.92;           // peak opacity at cursor
+  const COLOR   = '255, 252, 244';
+
+  const spans = Array.from(document.querySelectorAll('.prose.spotlight .haze'));
+  if (!spans.length) return;
+  let raf = 0, mx = -9999, my = -9999;
+
+  function paint() {
+    raf = 0;
+    for (const s of spans) {
+      const rects = s.getClientRects();
+      let best = Infinity;
+      for (let i = 0; i < rects.length; i++) {
+        const r = rects[i];
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const d = Math.hypot(mx - cx, my - cy);
+        if (d < best) best = d;
+      }
+      const t = Math.max(0, 1 - best / RADIUS);
+      const eased = Math.pow(t, FALLOFF);
+      const op = MIN_OP + eased * (MAX_OP - MIN_OP);
+      s.style.color = `rgba(${COLOR}, ${op.toFixed(3)})`;
+    }
+  }
+
+  function schedule() { if (!raf) raf = requestAnimationFrame(paint); }
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY; schedule();
+  }, { passive: true });
+  document.addEventListener('scroll', schedule, { passive: true });
+  document.addEventListener('mouseleave', () => {
+    mx = -9999; my = -9999; schedule();
+  });
+})();
+
+/* ── YEAR EXPAND ─────────────────────────────────────────────────────────── */
 function toggleYear(btn) {
-  const body = btn.nextElementSibling;
-  const open = btn.classList.toggle('open');
-  body.classList.toggle('open', open);
+  const year = btn.closest('.year');
+  const open = year.classList.toggle('collapsed') === false;
+  btn.classList.toggle('open', open);
+  btn.textContent = open ? 'collapse' : 'expand';
 }
 
-/* ── MOBILE NAV ────────────────────────────────────────────── */
-const ham       = document.getElementById('ham');
-const mobOver   = document.getElementById('mob-overlay');
-
-ham.addEventListener('click', () => {
-  const on = ham.classList.toggle('open');
-  mobOver.classList.toggle('open', on);
-  document.body.style.overflow = on ? 'hidden' : '';
-});
-mobOver.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    ham.classList.remove('open');
-    mobOver.classList.remove('open');
-    document.body.style.overflow = '';
+/* ── SCROLL REVEAL ───────────────────────────────────────────────────────── */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); }
   });
-});
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.rev').forEach(el => revObs.observe(el));
 
-/* ── NAV SCROLL ────────────────────────────────────────────── */
-const mainNav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  mainNav.classList.toggle('scrolled', window.scrollY > 40);
-}, { passive: true });
-
-/* ── ACTIVE NAV ────────────────────────────────────────────── */
+/* ── ACTIVE NAV ──────────────────────────────────────────────────────────── */
 const navAs = document.querySelectorAll('.nav-links a[data-s]');
-const secIds = ['bio','journey','gallery','links'];
-
-const secObs = new IntersectionObserver(entries => {
+const ids = ['bio', 'shows', 'photos', 'links'];
+const navObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       navAs.forEach(a => a.classList.toggle('active', a.dataset.s === e.target.id));
     }
   });
-}, { rootMargin: '-35% 0px -60% 0px' });
+}, { rootMargin: '-40% 0px -55% 0px' });
+ids.forEach(id => { const el = document.getElementById(id); if (el) navObs.observe(el); });
 
-secIds.forEach(id => { const el = document.getElementById(id); if (el) secObs.observe(el); });
-
-/* ── SCROLL REVEAL ─────────────────────────────────────────── */
-const revObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
-  });
-}, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
-
-/* ── LIGHTBOX ──────────────────────────────────────────────── */
+/* ── LIGHTBOX ────────────────────────────────────────────────────────────── */
 const lb     = document.getElementById('lb');
 const lbImg  = document.getElementById('lb-img');
 const lbInfo = document.getElementById('lb-info');
-const lbX    = document.getElementById('lb-x');
-const lbP    = document.getElementById('lb-p');
-const lbN    = document.getElementById('lb-n');
-const items  = Array.from(document.querySelectorAll('.g-item'));
-const imgs   = items.map(el => ({ src: el.querySelector('img').src, alt: el.querySelector('img').alt }));
+const figs   = Array.from(document.querySelectorAll('.photos figure'));
+const imgs   = figs.map(f => ({ src: f.querySelector('img').src, alt: f.querySelector('img').alt }));
 let cur = 0;
 
-function openLb(i) {
-  cur = i; showLb();
-  lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLb() {
-  lb.classList.remove('open');
-  document.body.style.overflow = '';
-}
-function showLb() {
+function show() {
   lbImg.src = imgs[cur].src;
   lbImg.alt = imgs[cur].alt;
   lbInfo.textContent = `${cur + 1} / ${imgs.length}`;
 }
+function open(i) { cur = i; show(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function close() { lb.classList.remove('open'); document.body.style.overflow = ''; }
 
-items.forEach((el, i) => el.addEventListener('click', () => openLb(i)));
-lbX.addEventListener('click', closeLb);
-lbP.addEventListener('click', () => { cur = (cur - 1 + imgs.length) % imgs.length; showLb(); });
-lbN.addEventListener('click', () => { cur = (cur + 1) % imgs.length; showLb(); });
-lb.addEventListener('click',  e => { if (e.target === lb) closeLb(); });
+figs.forEach((f, i) => f.addEventListener('click', () => open(i)));
+document.getElementById('lb-x').addEventListener('click', close);
+document.getElementById('lb-p').addEventListener('click', e => { e.stopPropagation(); cur = (cur - 1 + imgs.length) % imgs.length; show(); });
+document.getElementById('lb-n').addEventListener('click', e => { e.stopPropagation(); cur = (cur + 1) % imgs.length; show(); });
+lb.addEventListener('click', e => { if (e.target === lb) close(); });
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
-  if (e.key === 'Escape')      closeLb();
-  if (e.key === 'ArrowLeft')   { cur = (cur - 1 + imgs.length) % imgs.length; showLb(); }
-  if (e.key === 'ArrowRight')  { cur = (cur + 1) % imgs.length; showLb(); }
+  if (e.key === 'Escape')     close();
+  if (e.key === 'ArrowLeft')  { cur = (cur - 1 + imgs.length) % imgs.length; show(); }
+  if (e.key === 'ArrowRight') { cur = (cur + 1) % imgs.length; show(); }
 });
-
-/* ── COUNT UP (spring physics, triggers on scroll into view) ─────────────── */
-function springCountUp(el, from, to, suffix, duration) {
-  const stiffness = 100 * (1 / duration);
-  const damping   = 20  + 40 * (1 / duration);
-  let pos  = from;
-  let vel  = 0;
-  let last = performance.now();
-
-  el.textContent = from + suffix;
-
-  (function tick(now) {
-    const dt  = Math.min((now - last) / 1000, 0.064);
-    last = now;
-    const acc = stiffness * (to - pos) - damping * vel;
-    vel += acc * dt;
-    pos += vel * dt;
-
-    if (Math.abs(to - pos) < 0.3 && Math.abs(vel) < 0.3) {
-      el.textContent = to + suffix;
-      return;
-    }
-    el.textContent = Math.round(pos) + suffix;
-    requestAnimationFrame(tick);
-  })(last);
-}
-
-const statObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    statObs.unobserve(e.target);
-    const el   = e.target;
-    const raw  = el.textContent.trim();            // e.g. "100+" "2M+" "15+" "2019"
-
-    if (raw.includes('M')) {
-      springCountUp(el, 0, 2, 'M+', 2);
-    } else {
-      const num    = parseInt(raw.replace(/\D/g, ''));
-      const suffix = raw.replace(/[\d]/g, '');     // keep "+", "" etc.
-      const fromN  = raw === '2019' ? 2015 : 0;
-      springCountUp(el, fromN, num, suffix, raw === '2019' ? 1.2 : 2);
-    }
-  });
-}, { threshold: 0.4 });
-
-document.querySelectorAll('.stat-num').forEach(el => statObs.observe(el));
 </script>
 
 </body>
