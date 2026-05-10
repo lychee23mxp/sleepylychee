@@ -307,140 +307,56 @@ footer {
 footer a { color: var(--text); text-decoration: none; transition: color .15s; }
 footer a:hover { color: var(--text-em); }
 
-/* ── NOW PLAYING (custom Spotify-controlled pill) ───────────────────────── */
+/* ── NOW PLAYING (Spotify embed, framed) ────────────────────────────────── */
 .np {
   position: fixed;
   left: 1.5rem;
   bottom: 1.5rem;
   z-index: 50;
-  display: inline-flex;
-  align-items: center;
-  gap: .85rem;
-  padding: .55rem 1.1rem .55rem .55rem;
-  background: rgba(18, 16, 14, .72);
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, .55);
-  font-family: var(--font);
-  cursor: pointer;
-  user-select: none;
+  width: 320px;
+  border-radius: 14px;
   overflow: hidden;
-  min-width: 240px;
-  max-width: 280px;
+  background: rgba(18, 16, 14, .82);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .55);
   opacity: 0;
   transform: translateY(140%);
   animation: npEnter .8s cubic-bezier(.2,.7,.2,1) 1.4s forwards;
-  transition: background .25s ease, border-color .25s ease, transform .35s ease, opacity .35s ease;
+  transition: transform .35s ease, opacity .35s ease;
 }
-@keyframes npEnter {
-  to { opacity: 1; transform: translateY(0); }
-}
-.np:hover {
-  background: rgba(26, 22, 19, .88);
-  border-color: rgba(255,252,244,.18);
-}
+@keyframes npEnter { to { opacity: 1; transform: translateY(0); } }
 .np.hidden { transform: translateY(140%); opacity: 0; pointer-events: none; }
 
-.np-btn {
-  flex-shrink: 0;
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  background: var(--text-em);
-  color: #0c0b0a;
-  border: none;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  position: relative;
-  transition: transform .15s ease, background .2s ease;
-}
-.np:hover .np-btn { transform: scale(1.06); }
-.np-btn:active { transform: scale(.96); }
-.np-btn svg { width: 14px; height: 14px; display: block; }
-.np-btn .ico-pause, .np-btn .eq { display: none; }
-
-.np.playing .np-btn .ico-play  { display: none; }
-.np.playing .np-btn .eq        { display: flex; }
-.np.playing:hover .np-btn .eq  { display: none; }
-.np.playing:hover .np-btn .ico-pause { display: block; }
-
-/* EQ bars */
-.eq {
-  align-items: flex-end;
-  justify-content: center;
-  gap: 2px;
-  height: 14px;
-  width: 14px;
-}
-.eq i {
-  width: 2px;
-  background: currentColor;
-  border-radius: 1px;
+.np iframe {
   display: block;
-  animation: eqBar .9s ease-in-out infinite;
-  transform-origin: bottom;
-}
-.eq i:nth-child(1) { height: 70%;  animation-delay: -.30s; }
-.eq i:nth-child(2) { height: 100%; animation-delay: -.10s; }
-.eq i:nth-child(3) { height: 60%;  animation-delay: -.55s; }
-@keyframes eqBar {
-  0%, 100% { transform: scaleY(.35); }
-  50%      { transform: scaleY(1); }
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
 }
 
-.np-meta {
-  display: flex; flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-.np-title {
-  font-size: 13px;
-  color: var(--text-em);
-  font-weight: 500;
-  letter-spacing: -0.005em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.25;
-}
-.np-sub {
-  font-size: 10px;
-  color: var(--text-mid);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.np-progress {
+.np-close {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 1.5px;
-  background: rgba(255, 252, 244, .04);
-  pointer-events: none;
+  top: .4rem;
+  right: .45rem;
+  z-index: 2;
+  width: 22px; height: 22px;
+  background: rgba(12, 11, 10, .55);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--text-mid);
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s, background .15s, border-color .15s;
 }
-.np-progress span {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: var(--text-em);
-  transition: width .25s linear;
-}
-
-#spotify-host {
-  position: fixed;
-  left: -10000px; top: -10000px;
-  width: 300px; height: 80px;
-  opacity: 0; pointer-events: none;
-}
+.np-close:hover { color: var(--text-em); background: rgba(28,25,22,.85); border-color: rgba(255,252,244,.18); }
 
 @media (max-width: 640px) {
-  .np {
-    left: .8rem; bottom: .8rem;
-    min-width: 0; max-width: calc(100% - 1.6rem);
-  }
+  .np { left: .8rem; right: .8rem; bottom: .8rem; width: auto; }
 }
 
 /* ── LIGHTBOX ───────────────────────────────────────────────────────────── */
@@ -736,21 +652,16 @@ footer a:hover { color: var(--text-em); }
 
 </div>
 
-<!-- NOW PLAYING — custom pill, hidden Spotify iframe controlled via API -->
-<aside class="np" id="np" role="button" tabindex="0"
-       aria-label="Toggle playback: Deep Bongo by SLEEPYLYCHEE">
-  <span class="np-btn" aria-hidden="true">
-    <svg class="ico-play"  viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-    <svg class="ico-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>
-    <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
-  </span>
-  <span class="np-meta">
-    <span class="np-title">Deep Bongo</span>
-    <span class="np-sub">SLEEPYLYCHEE</span>
-  </span>
-  <span class="np-progress"><span id="np-fill"></span></span>
+<!-- NOW PLAYING — Spotify embed (clickable to open in Spotify) -->
+<aside class="np" id="np" aria-label="Now playing: Deep Bongo">
+  <button class="np-close" id="np-close" type="button" aria-label="Hide player">×</button>
+  <iframe
+    src="https://open.spotify.com/embed/track/2VTSA3NciEiH3AcMbwXMbb?utm_source=generator&theme=0"
+    width="100%" height="80"
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    loading="lazy"
+    title="Spotify: Deep Bongo by SLEEPYLYCHEE"></iframe>
 </aside>
-<div id="spotify-host" aria-hidden="true"></div>
 
 <!-- LIGHTBOX -->
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
@@ -762,42 +673,12 @@ footer a:hover { color: var(--text-em); }
 </div>
 
 <script>
-/* ── NOW PLAYING (Spotify IFrame API controller) ────────────────────────── */
+/* ── NOW PLAYING (close button) ─────────────────────────────────────────── */
 (function np() {
-  const np   = document.getElementById('np');
-  const fill = document.getElementById('np-fill');
-  const host = document.getElementById('spotify-host');
-  if (!np || !host) return;
-
-  let ctrl = null;
-
-  window.onSpotifyIframeApiReady = (IFrameAPI) => {
-    IFrameAPI.createController(host, {
-      width: 300, height: 80,
-      uri: 'spotify:track:2VTSA3NciEiH3AcMbwXMbb',
-    }, (c) => {
-      ctrl = c;
-      c.addListener('playback_update', e => {
-        const d = e.data || {};
-        np.classList.toggle('playing', !d.isPaused);
-        if (fill && d.duration) {
-          fill.style.width = ((d.position / d.duration) * 100).toFixed(2) + '%';
-        }
-      });
-    });
-  };
-
-  function toggle() { if (ctrl) ctrl.togglePlay(); }
-  np.addEventListener('click', toggle);
-  np.addEventListener('keydown', e => {
-    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
-  });
-
-  // Inject Spotify Iframe API script
-  const s = document.createElement('script');
-  s.src = 'https://open.spotify.com/embed/iframe-api/v1';
-  s.async = true;
-  document.body.appendChild(s);
+  const el = document.getElementById('np');
+  const x  = document.getElementById('np-close');
+  if (!el || !x) return;
+  x.addEventListener('click', () => el.classList.add('hidden'));
 })();
 
 /* ── CURSOR SPOTLIGHT (fog reveal on hazed text) ────────────────────────── */
