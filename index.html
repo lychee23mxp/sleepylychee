@@ -256,49 +256,73 @@ section { margin-top: 5.5rem; scroll-margin-top: 2rem; }
   transform: scale(1.04);
 }
 
-/* ── PRESS ──────────────────────────────────────────────────────────────── */
-.press-list { list-style: none; }
-.press-list li { border-bottom: 1px solid var(--line); }
-.press-list li:first-child { border-top: 1px solid var(--line); }
-.press-list a {
-  display: grid;
-  grid-template-columns: 160px 1fr auto;
-  gap: 1.4rem;
-  align-items: baseline;
-  padding: 1.1rem 0;
+/* ── PRESS (slow auto-scrolling ticker) ─────────────────────────────────── */
+.ticker {
+  margin-top: 1.6rem;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.ticker-track {
+  display: flex;
+  gap: .8rem;
+  width: max-content;
+  animation: ticker-scroll 32s linear infinite;
+}
+.ticker:hover .ticker-track { animation-play-state: paused; }
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.press-card {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  flex: 0 0 auto;
+  width: 280px;
+  padding: 1.1rem 1.2rem;
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-bd);
+  border-radius: 12px;
   text-decoration: none;
   color: inherit;
-  transition: opacity .2s ease;
+  transition: border-color .2s ease, transform .2s ease, background .2s ease;
 }
-.press-list a:hover { opacity: .82; }
-.press-source {
+a.press-card:hover {
+  border-color: var(--pill-bd-h);
+  transform: translateY(-2px);
+  background: rgba(255,252,244,0.06);
+}
+.press-card-top {
+  display: flex; align-items: baseline; justify-content: space-between; gap: .6rem;
+}
+.press-card-source {
   font-size: 11.5px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-mid);
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.press-quote {
-  font-size: 15.5px;
-  color: var(--text-em);
-  line-height: 1.5;
-}
-.press-quote .src {
-  color: var(--text);
-  font-size: 13px;
-}
-.press-meta {
-  display: inline-flex; align-items: baseline; gap: .55rem;
-  font-size: 11.5px;
+.press-card-meta {
+  font-size: 10.5px;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
-.press-meta::after {
-  content: '↗';
-  font-size: 13px;
-  color: var(--text-mid);
+.press-card-line {
+  font-size: 14px;
+  color: var(--text-em);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ── LINKS ROW ──────────────────────────────────────────────────────────── */
@@ -456,13 +480,16 @@ footer a:hover { color: var(--text-em); }
   .shows li { grid-template-columns: 56px 1fr; gap: .8rem; font-size: 14.5px; }
   .shows .city { display: none; }
   .photos figure { width: 140px; height: 140px; }
-  .press-list a { grid-template-columns: 1fr; gap: .35rem; padding: 1rem 0; }
+  .press-card { width: 230px; padding: .9rem 1rem; }
+  .ticker-track { animation-duration: 20s; }
   footer { flex-direction: column; gap: .8rem; align-items: flex-start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .version::before { animation: none; }
   .rev { opacity: 1; transform: none; transition: none; }
+  .ticker-track { animation: none; }
+  .ticker { overflow-x: auto; }
 }
 </style>
 </head>
@@ -474,9 +501,9 @@ footer a:hover { color: var(--text-em); }
   <nav>
     <ul class="nav-links">
       <li><a href="#bio"    data-s="bio">Bio</a></li>
-      <li><a href="#shows"  data-s="shows">Shows</a></li>
       <li><a href="#photos" data-s="photos">Photos</a></li>
       <li><a href="#press"  data-s="press">Press</a></li>
+      <li><a href="#shows"  data-s="shows">Shows</a></li>
       <li><a href="#links"  data-s="links">Links</a></li>
     </ul>
     <span class="version">R/138 · ON AIR</span>
@@ -522,6 +549,56 @@ footer a:hover { color: var(--text-em); }
       <span class="haze">In her musical world, she leads the audience into a space filled with tension and rhythm, breaking traditional boundaries and ushering them into unknown territories. A recent guest mix is up with</span>
       <a class="pill" href="https://soundcloud.com/6amgroup/guest-mix-sleepylychee?si=b3e4e28ca30847d7a43f485df223a537" target="_blank" rel="noopener">6AM GROUP</a><span class="haze">.</span>
     </p>
+  </section>
+
+  <!-- PHOTOS -->
+  <section id="photos">
+    <span class="eyebrow">photos</span>
+    <div class="photos">
+      <figure data-i="0"><img src="IMG_6290.jpg" alt="Live set" loading="lazy"></figure>
+      <figure data-i="1"><img src="IMG_6296.PNG" alt="Event" loading="lazy"></figure>
+      <figure data-i="2"><img src="IMG_6299.JPG" alt="Event" loading="lazy"></figure>
+      <figure data-i="3"><img src="https://static.wixstatic.com/media/af8f99_50c268571fc348b9a642b37bb8c55474~mv2.jpg" alt="Live set" loading="lazy"></figure>
+      <figure data-i="4"><img src="https://static.wixstatic.com/media/af8f99_ad47fefb8ed345978c055d27219f202c~mv2.jpg" alt="Event" loading="lazy"></figure>
+      <figure data-i="5"><img src="https://static.wixstatic.com/media/af8f99_c84ab3c970874865bb8c95ba618ba13a~mv2.jpg" alt="Event" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <!-- PRESS -->
+  <section id="press">
+    <span class="eyebrow">press &amp; curators</span>
+    <div class="ticker">
+      <div class="ticker-track" id="press-track">
+        <a class="press-card" href="https://mixmag.asia/feature/artists-exciting-us-in-2026-june" target="_blank" rel="noopener">
+          <span class="press-card-top"><span class="press-card-source">Mixmag Asia</span><span class="press-card-meta">Jun 2026</span></span>
+          <span class="press-card-line">&ldquo;Her recent release &lsquo;Feel The Bass&rsquo; is a testament to her sound; polyrhythmic percussion, pulsating low-end, and slow-burn sonic shifts.&rdquo;</span>
+        </a>
+        <a class="press-card" href="https://www.palmsout.net/2026/from-the-mailbox-57/" target="_blank" rel="noopener">
+          <span class="press-card-top"><span class="press-card-source">Palms Out Sounds</span><span class="press-card-meta">May 2026</span></span>
+          <span class="press-card-line">&ldquo;Dubby bits of left-field techno.&rdquo;</span>
+        </a>
+        <a class="press-card" href="https://www.wavgallery.com/the-curators-crates-volume-9/" target="_blank" rel="noopener">
+          <span class="press-card-top"><span class="press-card-source">WAV Gallery</span><span class="press-card-meta">Mar 2026</span></span>
+          <span class="press-card-line">&ldquo;…a track that feels like stepping into a dim warehouse filled with haze and bodies in motion.&rdquo;</span>
+        </a>
+        <a class="press-card" href="https://anewpodcastnow.wordpress.com/2026/01/23/exclusive-coverage-of-dj-sleepy-lychees-birthday-dj-party-dtla/" target="_blank" rel="noopener">
+          <span class="press-card-top"><span class="press-card-source">ANEW</span><span class="press-card-meta">Jan 2026</span></span>
+          <span class="press-card-line">&ldquo;A carefully curated blend of tribal grooves and high-tempo drops.&rdquo;</span>
+        </a>
+        <a class="press-card" href="https://beatforbeat.com.br/site/sleepylychee-mostra-sua-personalidade-em-feel-the-bass/" target="_blank" rel="noopener">
+          <span class="press-card-top"><span class="press-card-source">Beat for Beat</span><span class="press-card-meta">Jul 2026</span></span>
+          <span class="press-card-line">&ldquo;&lsquo;Feel The Bass&rsquo; pairs sonic pressure and experimentation with a strong connection to club culture.&rdquo;</span>
+        </a>
+        <a class="press-card" href="https://indie-tapes.com/post/822103441095737344/sleepylychee-feel-the-bass-elektro" target="_blank" rel="noopener">
+          <span class="press-card-top"><span class="press-card-source">IndieTapes</span><span class="press-card-meta">Jul 2026</span></span>
+          <span class="press-card-line">&ldquo;Minimalistic yet always pulsating, energetic and absolutely original.&rdquo;</span>
+        </a>
+        <a class="press-card" href="https://www.perspectiveonlife.nl/2026/07/deep-bongo-sleepylychee-techno-review.html" target="_blank" rel="noopener">
+          <span class="press-card-top"><span class="press-card-source">Perspective</span><span class="press-card-meta">Jul 2026</span></span>
+          <span class="press-card-line">&ldquo;The bongo elements bring an organic, tribal pulse that cuts through the synthetic layers — ideal for darker, sweatier sets.&rdquo;</span>
+        </a>
+      </div>
+    </div>
   </section>
 
   <!-- SHOWS -->
@@ -625,54 +702,6 @@ footer a:hover { color: var(--text-em); }
         <li><span class="date">May 13</span><span class="where">@<strong>bananaradio</strong> with @swimsoul</span><span class="city">Los Angeles</span></li>
       </ul>
     </div>
-  </section>
-
-  <!-- PHOTOS -->
-  <section id="photos">
-    <span class="eyebrow">photos</span>
-    <div class="photos">
-      <figure data-i="0"><img src="IMG_6290.jpg" alt="Live set" loading="lazy"></figure>
-      <figure data-i="1"><img src="IMG_6296.PNG" alt="Event" loading="lazy"></figure>
-      <figure data-i="2"><img src="IMG_6299.JPG" alt="Event" loading="lazy"></figure>
-      <figure data-i="3"><img src="https://static.wixstatic.com/media/af8f99_50c268571fc348b9a642b37bb8c55474~mv2.jpg" alt="Live set" loading="lazy"></figure>
-      <figure data-i="4"><img src="https://static.wixstatic.com/media/af8f99_ad47fefb8ed345978c055d27219f202c~mv2.jpg" alt="Event" loading="lazy"></figure>
-      <figure data-i="5"><img src="https://static.wixstatic.com/media/af8f99_c84ab3c970874865bb8c95ba618ba13a~mv2.jpg" alt="Event" loading="lazy"></figure>
-    </div>
-  </section>
-
-  <!-- PRESS -->
-  <section id="press">
-    <span class="eyebrow">press</span>
-    <ul class="press-list">
-      <li>
-        <a href="https://mixmag.asia/feature/artists-exciting-us-in-2026-june" target="_blank" rel="noopener">
-          <span class="press-source">Mixmag Asia</span>
-          <span class="press-quote">&ldquo;Her recent release &lsquo;Feel The Bass&rsquo; is a testament to her sound; polyrhythmic percussion, pulsating low-end, and slow-burn sonic shifts.&rdquo; <span class="src">— Artists Exciting Us in 2026 / June</span></span>
-          <span class="press-meta">Jun 2026</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://www.palmsout.net/2026/from-the-mailbox-57/" target="_blank" rel="noopener">
-          <span class="press-source">Palms Out Sounds</span>
-          <span class="press-quote">&ldquo;Dubby bits of left-field techno.&rdquo; <span class="src">— From the Mailbox 57</span></span>
-          <span class="press-meta">May 2026</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://www.wavgallery.com/the-curators-crates-volume-9/" target="_blank" rel="noopener">
-          <span class="press-source">WAV Gallery</span>
-          <span class="press-quote">&ldquo;…a track that feels like stepping into a dim warehouse filled with haze and bodies in motion.&rdquo; <span class="src">— The Curator's Crates, Vol. 9</span></span>
-          <span class="press-meta">Mar 2026</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://anewpodcastnow.wordpress.com/2026/01/23/exclusive-coverage-of-dj-sleepy-lychees-birthday-dj-party-dtla/" target="_blank" rel="noopener">
-          <span class="press-source">ANEW</span>
-          <span class="press-quote">&ldquo;A carefully curated blend of tribal grooves and high-tempo drops.&rdquo; <span class="src">— Birthday Party Coverage, DTLA</span></span>
-          <span class="press-meta">Jan 2026</span>
-        </a>
-      </li>
-    </ul>
   </section>
 
   <!-- LINKS -->
@@ -785,7 +814,7 @@ document.querySelectorAll('.rev').forEach(el => revObs.observe(el));
 
 /* ── ACTIVE NAV ──────────────────────────────────────────────────────────── */
 const navAs = document.querySelectorAll('.nav-links a[data-s]');
-const ids = ['bio', 'shows', 'photos', 'press', 'links'];
+const ids = ['bio', 'photos', 'press', 'shows', 'links'];
 const navObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -794,6 +823,13 @@ const navObs = new IntersectionObserver(entries => {
   });
 }, { rootMargin: '-40% 0px -55% 0px' });
 ids.forEach(id => { const el = document.getElementById(id); if (el) navObs.observe(el); });
+
+/* ── PRESS TICKER (duplicate cards for seamless infinite scroll) ───────── */
+(function ticker() {
+  const track = document.getElementById('press-track');
+  if (!track) return;
+  track.innerHTML += track.innerHTML;
+})();
 
 /* ── LIGHTBOX ────────────────────────────────────────────────────────────── */
 const lb     = document.getElementById('lb');
